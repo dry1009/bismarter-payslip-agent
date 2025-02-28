@@ -12,6 +12,7 @@ interface ChatInputProps {
 const ChatInput = ({ onSendMessage, isLoading }: ChatInputProps) => {
   const [message, setMessage] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
+  const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -34,6 +35,12 @@ const ChatInput = ({ onSendMessage, isLoading }: ChatInputProps) => {
       if (inputRef.current) {
         inputRef.current.scrollIntoView({ behavior: 'smooth' });
       }
+      
+      // זיהוי אם המקלדת פתוחה
+      if (window.visualViewport) {
+        const heightDiff = window.innerHeight - window.visualViewport.height;
+        setIsKeyboardOpen(heightDiff > 150);
+      }
     };
 
     // Modern browsers support visualViewport API
@@ -41,10 +48,20 @@ const ChatInput = ({ onSendMessage, isLoading }: ChatInputProps) => {
       window.visualViewport.addEventListener('resize', handleVisualViewportResize);
     }
 
+    // התמקד בשדה הקלט במסך המגע
+    const handleTouchStart = () => {
+      if (inputRef.current) {
+        inputRef.current.focus();
+      }
+    };
+
+    document.addEventListener('touchstart', handleTouchStart, { passive: true });
+
     return () => {
       if (window.visualViewport) {
         window.visualViewport.removeEventListener('resize', handleVisualViewportResize);
       }
+      document.removeEventListener('touchstart', handleTouchStart);
     };
   }, []);
 
@@ -58,7 +75,7 @@ const ChatInput = ({ onSendMessage, isLoading }: ChatInputProps) => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex items-center gap-2 p-3"
+      className={`flex items-center gap-2 ${isKeyboardOpen ? 'p-2' : 'p-3'} transition-all duration-200`}
     >
       <Button
         type="submit"
@@ -76,6 +93,11 @@ const ChatInput = ({ onSendMessage, isLoading }: ChatInputProps) => {
         className="flex-1 text-right"
         dir="rtl"
         disabled={isLoading}
+        onFocus={() => setIsKeyboardOpen(true)}
+        onBlur={() => {
+          // השהה מעט את ההחלפה כדי לא ליצור קפיצות מיותרות
+          setTimeout(() => setIsKeyboardOpen(false), 300);
+        }}
       />
     </form>
   );
