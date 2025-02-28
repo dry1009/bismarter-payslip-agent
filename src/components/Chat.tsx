@@ -113,7 +113,7 @@ const Chat = () => {
               <div className="w-16 h-16 mb-4 rounded-full bg-gray-100 flex items-center justify-center">
                 <span className="text-2xl">👋</span>
               </div>
-              <h2 className="text-xl font-semibold mb-2 text-gray-800">ברוך הבא לצ'אט</h2>
+              <h2 className="text-xl font-semibold mb-2 text-gray-800">ברוך הבא טילור</h2>
               <p className="text-gray-500 max-w-sm">
                 כאן תוכל לשאול כל שאלה שתרצה לגבי השכר שלך
               </p>
