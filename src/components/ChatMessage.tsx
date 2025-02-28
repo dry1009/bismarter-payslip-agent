@@ -1,41 +1,47 @@
 
 import { cn } from "@/lib/utils";
-import { motion } from "framer-motion";
+import { memo } from "react";
 
 interface ChatMessageProps {
   content: string;
   isUser: boolean;
-  timestamp: Date;
+  timestamp?: Date;
+  isTyping?: boolean;
 }
 
-const ChatMessage = ({ content, isUser, timestamp }: ChatMessageProps) => {
-  // Format time for display
-  const formattedTime = new Intl.DateTimeFormat('he-IL', {
-    hour: '2-digit',
-    minute: '2-digit'
-  }).format(timestamp);
-
+const ChatMessage = memo(({ content, isUser, isTyping }: ChatMessageProps) => {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20, scale: 0.95 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{ type: "spring", stiffness: 500, damping: 30 }}
+    <div
       className={cn(
-        "message",
-        isUser ? "user-message" : "agent-message"
+        "flex w-full animate-message-appear mb-4",
+        isUser ? "justify-end" : "justify-start"
       )}
     >
-      <div className="flex flex-col">
-        <div className="text-sm font-medium mb-1">
-          {isUser ? "אתה" : "הסוכן"}
-        </div>
-        <div className="whitespace-pre-wrap">{content}</div>
-        <div className="text-xs text-right mt-1 opacity-70">
-          {formattedTime}
-        </div>
+      <div
+        className={cn(
+          "max-w-[80%] rounded-2xl px-4 py-2 shadow-sm",
+          isUser
+            ? "bg-chat-user text-white"
+            : "bg-chat-assistant text-gray-800"
+        )}
+      >
+        <p className="text-sm md:text-base whitespace-pre-wrap" dir="rtl">
+          {isTyping ? (
+            <span className="flex gap-1 items-center justify-end">
+              <span className="mr-1">מכין תשובה</span>
+              <span className="animate-bounce delay-300">.</span>
+              <span className="animate-bounce delay-200">.</span>
+              <span className="animate-bounce delay-100">.</span>
+            </span>
+          ) : (
+            content
+          )}
+        </p>
       </div>
-    </motion.div>
+    </div>
   );
-};
+});
+
+ChatMessage.displayName = "ChatMessage";
 
 export default ChatMessage;
