@@ -77,9 +77,9 @@ const Chat = () => {
   };
 
   return (
-    <div className="flex flex-col h-[calc(var(--vh,1vh)*100)] bg-gray-50">
+    <div className="flex flex-col h-[100dvh] max-h-[100dvh] overflow-hidden bg-gray-50">
       <ChatHeader />
-      <div className="flex-1 overflow-y-auto px-4 pb-4" dir="rtl">
+      <div className="flex-1 overflow-y-auto px-4 pb-4 relative" dir="rtl">
         <div className="max-w-3xl mx-auto space-y-4 pt-4">
           {messages.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full text-center p-8 pt-16">
