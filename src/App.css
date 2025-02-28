@@ -7,13 +7,3 @@ html, body, #root {
   width: 100%;
   overflow: hidden;
 }
-
-/* מעברים חלקים לשינויי גובה של רכיבים */
-.transition-all {
-  transition-property: all;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.duration-200 {
-  transition-duration: 200ms;
-}
