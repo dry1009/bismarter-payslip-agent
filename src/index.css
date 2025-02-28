@@ -92,22 +92,14 @@
   html {
     height: 100%;
     direction: rtl;
-    overflow: hidden;
-    position: fixed;
-    width: 100%;
-    overscroll-behavior: none;
+    overflow: auto;
   }
   
   body {
     @apply bg-background text-foreground;
     height: 100%;
-    overflow: hidden;
+    overflow: auto;
     font-feature-settings: "rlig" 1, "calt" 1;
-    position: fixed;
-    width: 100%;
-    overscroll-behavior: none;
-    -webkit-overflow-scrolling: touch;
-    touch-action: pan-x pan-y;
   }
 
   #root {
@@ -115,9 +107,6 @@
     max-width: 100%;
     margin: 0;
     padding: 0;
-    overflow: hidden;
-    position: fixed;
-    inset: 0;
   }
 }
 

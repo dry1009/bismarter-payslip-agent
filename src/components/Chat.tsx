@@ -34,53 +34,13 @@ const Chat = () => {
       document.documentElement.style.setProperty('--vh', `${vh}px`);
     };
 
-    // Prevent bounce scrolling on iOS
-    const preventBounce = (e: TouchEvent) => {
-      if (chatContainerRef.current) {
-        const { scrollTop, scrollHeight, clientHeight } = chatContainerRef.current;
-        const isAtTop = scrollTop <= 0;
-        const isAtBottom = scrollTop + clientHeight >= scrollHeight - 1;
-
-        if ((isAtTop && e.touches[0].clientY > 0) || 
-            (isAtBottom && e.touches[0].clientY < 0)) {
-          e.preventDefault();
-        }
-      }
-    };
-
-    // Fix for iOS visual viewport issues
-    const fixIOSKeyboard = () => {
-      // Wait for the keyboard to fully open
-      setTimeout(() => {
-        window.scrollTo(0, 0);
-        document.body.scrollTop = 0;
-      }, 300);
-    };
-
     setViewHeight();
     window.addEventListener('resize', setViewHeight);
     window.addEventListener('orientationchange', setViewHeight);
-    
-    // Prevent document scrolling on mobile
-    document.body.style.overflow = 'hidden';
-    document.body.style.position = 'fixed';
-    document.body.style.width = '100%';
-    document.body.style.height = '100%';
-
-    // Focus handling for input fields
-    const inputs = document.querySelectorAll('input, textarea');
-    inputs.forEach(input => {
-      input.addEventListener('focus', fixIOSKeyboard);
-    });
 
     return () => {
       window.removeEventListener('resize', setViewHeight);
       window.removeEventListener('orientationchange', setViewHeight);
-      
-      // Clean up event listeners
-      inputs.forEach(input => {
-        input.removeEventListener('focus', fixIOSKeyboard);
-      });
     };
   }, []);
 
@@ -118,7 +78,7 @@ const Chat = () => {
   };
 
   return (
-    <div className="flex flex-col h-[100dvh] max-h-[100dvh] overflow-hidden bg-gray-50 fixed inset-0">
+    <div className="flex flex-col h-[100dvh] max-h-[100dvh] overflow-hidden bg-gray-50">
       <ChatHeader />
       <div 
         ref={chatContainerRef}
