@@ -18,6 +18,13 @@ const ChatInput = ({ onSendMessage, isLoading }: ChatInputProps) => {
     if (message.trim() && !isLoading) {
       onSendMessage(message);
       setMessage("");
+      
+      // התמקד בשדה הקלט מחדש לאחר שליחת ההודעה
+      setTimeout(() => {
+        if (inputRef.current) {
+          inputRef.current.focus();
+        }
+      }, 100);
     }
   };
 
@@ -40,6 +47,13 @@ const ChatInput = ({ onSendMessage, isLoading }: ChatInputProps) => {
       }
     };
   }, []);
+
+  // ממקד את תיבת הטקסט אחרי שינוי מצב הטעינה
+  useEffect(() => {
+    if (!isLoading && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [isLoading]);
 
   return (
     <form
