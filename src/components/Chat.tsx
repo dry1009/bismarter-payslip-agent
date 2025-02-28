@@ -17,7 +17,6 @@ const Chat = () => {
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
-  const [keyboardVisible, setKeyboardVisible] = useState(false);
 
   // Scroll to bottom whenever messages change
   const scrollToBottom = () => {
@@ -28,72 +27,42 @@ const Chat = () => {
     scrollToBottom();
   }, [messages, isLoading]);
 
-  // Add viewport height fix for mobile and keyboard handling
+  // Add viewport height fix for mobile
   useEffect(() => {
     const setViewHeight = () => {
       const vh = window.innerHeight * 0.01;
       document.documentElement.style.setProperty('--vh', `${vh}px`);
     };
 
-    // Handle visual viewport changes (for keyboard)
-    const handleResize = () => {
-      setViewHeight();
-      
-      // Detect keyboard visibility by comparing visual viewport height with window height
-      // On iOS/mobile browsers, visualViewport API helps detect keyboard
-      if (window.visualViewport) {
-        const isKeyboardVisible = window.visualViewport.height < window.innerHeight * 0.8;
-        setKeyboardVisible(isKeyboardVisible);
-        
-        if (isKeyboardVisible) {
-          // When keyboard opens, make sure we scroll to the bottom
-          setTimeout(scrollToBottom, 100);
-        }
-      }
-    };
+    setViewHeight();
+    window.addEventListener('resize', setViewHeight);
+    window.addEventListener('orientationchange', setViewHeight);
 
-    const handleFocus = () => {
-      // Set a small timeout to ensure it runs after the keyboard is fully open
+    return () => {
+      window.removeEventListener('resize', setViewHeight);
+      window.removeEventListener('orientationchange', setViewHeight);
+    };
+  }, []);
+
+  // Handle keyboard on mobile
+  useEffect(() => {
+    const handleFocusAndScroll = () => {
+      // Force scroll to bottom when input is focused
       setTimeout(() => {
-        scrollToBottom();
-        setKeyboardVisible(true);
+        window.scrollTo(0, document.body.scrollHeight);
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
       }, 300);
     };
 
-    const handleBlur = () => {
-      setKeyboardVisible(false);
-    };
-
-    // Initial setup
-    setViewHeight();
-    
-    // Add event listeners
-    window.addEventListener('resize', handleResize);
-    window.addEventListener('orientationchange', setViewHeight);
-    
-    if (window.visualViewport) {
-      window.visualViewport.addEventListener('resize', handleResize);
-    }
-    
-    // Add focus and blur events to input fields
-    const inputElement = document.querySelector('input');
-    if (inputElement) {
-      inputElement.addEventListener('focus', handleFocus);
-      inputElement.addEventListener('blur', handleBlur);
-    }
+    const inputElements = document.querySelectorAll('input');
+    inputElements.forEach(input => {
+      input.addEventListener('focus', handleFocusAndScroll);
+    });
 
     return () => {
-      window.removeEventListener('resize', handleResize);
-      window.removeEventListener('orientationchange', setViewHeight);
-      
-      if (window.visualViewport) {
-        window.visualViewport.removeEventListener('resize', handleResize);
-      }
-      
-      if (inputElement) {
-        inputElement.removeEventListener('focus', handleFocus);
-        inputElement.removeEventListener('blur', handleBlur);
-      }
+      inputElements.forEach(input => {
+        input.removeEventListener('focus', handleFocusAndScroll);
+      });
     };
   }, []);
 
@@ -131,11 +100,11 @@ const Chat = () => {
   };
 
   return (
-    <div className={`flex flex-col h-[100dvh] max-h-[100dvh] overflow-hidden bg-gray-50 ${keyboardVisible ? 'pb-[40vh]' : ''}`}>
+    <div className="flex flex-col h-full w-full bg-gray-50">
       <ChatHeader />
       <div 
         ref={chatContainerRef}
-        className="flex-1 overflow-y-auto px-4 pb-4 relative" 
+        className="flex-1 overflow-y-auto px-4 pb-4" 
         dir="rtl"
       >
         <div className="max-w-3xl mx-auto space-y-4 pt-4">
@@ -169,7 +138,7 @@ const Chat = () => {
           <div ref={messagesEndRef} />
         </div>
       </div>
-      <div className="w-full border-t bg-white sticky bottom-0 left-0 right-0 z-10">
+      <div className="w-full border-t bg-white">
         <div className="max-w-3xl mx-auto">
           <ChatInput onSendMessage={handleSendMessage} isLoading={isLoading} />
         </div>

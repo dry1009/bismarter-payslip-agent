@@ -89,24 +89,19 @@
     @apply border-border;
   }
   
-  html {
+  html, body, #root {
     height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
     direction: rtl;
-    overflow: auto;
   }
   
   body {
     @apply bg-background text-foreground;
-    height: 100%;
-    overflow: auto;
     font-feature-settings: "rlig" 1, "calt" 1;
-  }
-
-  #root {
-    height: 100%;
-    max-width: 100%;
-    margin: 0;
-    padding: 0;
+    -webkit-overflow-scrolling: touch;
   }
 }
 
