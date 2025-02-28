@@ -31,7 +31,7 @@ const ChatInput = ({ onSendMessage, isLoading }: ChatInputProps) => {
         disabled={isLoading || !message.trim()}
         className="shrink-0"
       >
-        <SendHorizontal className="h-5 w-5 transform rotate-180" />
+        <SendHorizontal className="h-5 w-5" />
       </Button>
       <Input
         value={message}
