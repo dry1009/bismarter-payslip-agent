@@ -70,7 +70,7 @@ const Chat = () => {
     <motion.div 
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="chat-container bg-secondary/30"
+      className="chat-container"
     >
       <ChatHeader />
       
@@ -83,10 +83,10 @@ const Chat = () => {
               transition={{ delay: 0.5 }}
               className="flex flex-col items-center justify-center h-full text-center p-8"
             >
-              <div className="w-16 h-16 mb-4 rounded-full bg-primary/10 flex items-center justify-center">
+              <div className="w-16 h-16 mb-4 rounded-full bg-gradient-to-br from-blue-100 to-purple-100 flex items-center justify-center">
                 <span className="text-primary text-2xl">👋</span>
               </div>
-              <h2 className="text-xl font-semibold mb-2">ברוך הבא לצ'אט</h2>
+              <h2 className="text-xl font-semibold mb-2 text-gray-800">ברוך הבא לצ'אט</h2>
               <p className="text-muted-foreground max-w-sm">
                 שלח הודעה להתחיל לשוחח עם הסוכן שלך
               </p>
@@ -103,11 +103,11 @@ const Chat = () => {
           )}
           
           {isLoading && (
-            <div className="self-start bg-muted p-4 rounded-2xl rounded-tl-none max-w-[85%] animate-pulse">
+            <div className="self-start bg-gradient-to-r from-blue-500/30 to-purple-600/30 p-4 rounded-2xl rounded-tl-none max-w-[85%]">
               <div className="flex space-x-2 rtl:space-x-reverse">
-                <div className="h-2 w-2 rounded-full bg-muted-foreground/30 animate-pulse"></div>
-                <div className="h-2 w-2 rounded-full bg-muted-foreground/30 animate-pulse" style={{ animationDelay: "0.2s" }}></div>
-                <div className="h-2 w-2 rounded-full bg-muted-foreground/30 animate-pulse" style={{ animationDelay: "0.4s" }}></div>
+                <div className="h-2 w-2 rounded-full bg-white/50 animate-pulse"></div>
+                <div className="h-2 w-2 rounded-full bg-white/50 animate-pulse" style={{ animationDelay: "0.2s" }}></div>
+                <div className="h-2 w-2 rounded-full bg-white/50 animate-pulse" style={{ animationDelay: "0.4s" }}></div>
               </div>
             </div>
           )}
