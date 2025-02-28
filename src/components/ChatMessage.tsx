@@ -22,9 +22,7 @@ const ChatMessage = ({ content, isUser, timestamp }: ChatMessageProps) => {
       transition={{ type: "spring", stiffness: 500, damping: 30 }}
       className={cn(
         "message",
-        isUser 
-          ? "user-message bg-white border border-gray-100 shadow-sm" 
-          : "agent-message bg-gradient-to-r from-blue-500 to-purple-600 text-white"
+        isUser ? "user-message" : "agent-message"
       )}
     >
       <div className="flex flex-col">

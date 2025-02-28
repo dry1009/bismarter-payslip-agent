@@ -14,7 +14,7 @@
     --popover: 0 0% 100%;
     --popover-foreground: 240 10% 3.9%;
 
-    --primary: 255 92% 76%;
+    --primary: 240 5.9% 10%;
     --primary-foreground: 0 0% 98%;
 
     --secondary: 240 4.8% 95.9%;
@@ -23,15 +23,15 @@
     --muted: 240 4.8% 95.9%;
     --muted-foreground: 240 3.8% 46.1%;
 
-    --accent: 255 92% 76%;
-    --accent-foreground: 0 0% 98%;
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
 
     --border: 240 5.9% 90%;
     --input: 240 5.9% 90%;
-    --ring: 255 92% 76%;
+    --ring: 240 5.9% 10%;
 
     --radius: 0.75rem;
   }
@@ -67,7 +67,7 @@
   }
   
   .chat-container {
-    @apply h-full flex flex-col overflow-hidden bg-gradient-to-b from-purple-50 to-white;
+    @apply h-full flex flex-col overflow-hidden;
   }
   
   .message-container {
@@ -83,7 +83,7 @@
   }
   
   .agent-message {
-    @apply bg-primary/90 text-primary-foreground self-start rounded-tl-none;
+    @apply bg-primary text-primary-foreground self-start rounded-tl-none;
   }
   
   .message-input {

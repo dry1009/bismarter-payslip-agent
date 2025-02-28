@@ -42,7 +42,7 @@ const ChatInput = ({ onSendMessage, isLoading }: ChatInputProps) => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.3 }}
-      className="relative p-4 border-t bg-white"
+      className="relative p-4 border-t bg-background"
     >
       <form onSubmit={handleSubmit} className="relative">
         <Textarea
@@ -51,13 +51,13 @@ const ChatInput = ({ onSendMessage, isLoading }: ChatInputProps) => {
           onChange={(e) => setMessage(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder="הקלד הודעה..."
-          className="pr-12 py-4 resize-none min-h-[60px] max-h-[200px] rounded-xl border-gray-200 focus:border-purple-400 focus:ring-2 focus:ring-purple-300"
+          className="pr-12 py-4 resize-none min-h-[60px] max-h-[200px] rounded-xl"
           disabled={isLoading}
         />
         <Button
           type="submit"
           size="icon"
-          className="absolute bottom-2 left-2 rounded-full w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700"
+          className="absolute bottom-2 left-2 rounded-full w-10 h-10"
           disabled={message.trim() === "" || isLoading}
         >
           {isLoading ? (
