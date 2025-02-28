@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { SendHorizontal } from "lucide-react";
-import { useState, FormEvent } from "react";
+import { useState, FormEvent, useEffect, useRef } from "react";
 
 interface ChatInputProps {
   onSendMessage: (message: string) => void;
@@ -11,6 +11,7 @@ interface ChatInputProps {
 
 const ChatInput = ({ onSendMessage, isLoading }: ChatInputProps) => {
   const [message, setMessage] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -19,6 +20,26 @@ const ChatInput = ({ onSendMessage, isLoading }: ChatInputProps) => {
       setMessage("");
     }
   };
+
+  useEffect(() => {
+    const handleVisualViewportResize = () => {
+      // Scroll the page to make the input visible when the keyboard opens
+      if (inputRef.current) {
+        inputRef.current.scrollIntoView({ behavior: 'smooth' });
+      }
+    };
+
+    // Modern browsers support visualViewport API
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', handleVisualViewportResize);
+    }
+
+    return () => {
+      if (window.visualViewport) {
+        window.visualViewport.removeEventListener('resize', handleVisualViewportResize);
+      }
+    };
+  }, []);
 
   return (
     <form
@@ -34,6 +55,7 @@ const ChatInput = ({ onSendMessage, isLoading }: ChatInputProps) => {
         <SendHorizontal className="h-5 w-5" />
       </Button>
       <Input
+        ref={inputRef}
         value={message}
         onChange={(e) => setMessage(e.target.value)}
         placeholder="הקלד/י הודעה..."
