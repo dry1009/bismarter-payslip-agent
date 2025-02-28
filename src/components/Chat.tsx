@@ -16,6 +16,7 @@ const Chat = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const chatContainerRef = useRef<HTMLDivElement>(null);
 
   // Scroll to bottom whenever messages change
   const scrollToBottom = () => {
@@ -26,20 +27,60 @@ const Chat = () => {
     scrollToBottom();
   }, [messages, isLoading]);
 
-  // Add viewport height fix for mobile
+  // Add viewport height fix for mobile and prevent scrolling
   useEffect(() => {
     const setViewHeight = () => {
       const vh = window.innerHeight * 0.01;
       document.documentElement.style.setProperty('--vh', `${vh}px`);
     };
 
+    // Prevent bounce scrolling on iOS
+    const preventBounce = (e: TouchEvent) => {
+      if (chatContainerRef.current) {
+        const { scrollTop, scrollHeight, clientHeight } = chatContainerRef.current;
+        const isAtTop = scrollTop <= 0;
+        const isAtBottom = scrollTop + clientHeight >= scrollHeight - 1;
+
+        if ((isAtTop && e.touches[0].clientY > 0) || 
+            (isAtBottom && e.touches[0].clientY < 0)) {
+          e.preventDefault();
+        }
+      }
+    };
+
+    // Fix for iOS visual viewport issues
+    const fixIOSKeyboard = () => {
+      // Wait for the keyboard to fully open
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        document.body.scrollTop = 0;
+      }, 300);
+    };
+
     setViewHeight();
     window.addEventListener('resize', setViewHeight);
     window.addEventListener('orientationchange', setViewHeight);
+    
+    // Prevent document scrolling on mobile
+    document.body.style.overflow = 'hidden';
+    document.body.style.position = 'fixed';
+    document.body.style.width = '100%';
+    document.body.style.height = '100%';
+
+    // Focus handling for input fields
+    const inputs = document.querySelectorAll('input, textarea');
+    inputs.forEach(input => {
+      input.addEventListener('focus', fixIOSKeyboard);
+    });
 
     return () => {
       window.removeEventListener('resize', setViewHeight);
       window.removeEventListener('orientationchange', setViewHeight);
+      
+      // Clean up event listeners
+      inputs.forEach(input => {
+        input.removeEventListener('focus', fixIOSKeyboard);
+      });
     };
   }, []);
 
@@ -77,9 +118,13 @@ const Chat = () => {
   };
 
   return (
-    <div className="flex flex-col h-[100dvh] max-h-[100dvh] overflow-hidden bg-gray-50">
+    <div className="flex flex-col h-[100dvh] max-h-[100dvh] overflow-hidden bg-gray-50 fixed inset-0">
       <ChatHeader />
-      <div className="flex-1 overflow-y-auto px-4 pb-4 relative" dir="rtl">
+      <div 
+        ref={chatContainerRef}
+        className="flex-1 overflow-y-auto px-4 pb-4 relative" 
+        dir="rtl"
+      >
         <div className="max-w-3xl mx-auto space-y-4 pt-4">
           {messages.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full text-center p-8 pt-16">
@@ -111,7 +156,7 @@ const Chat = () => {
           <div ref={messagesEndRef} />
         </div>
       </div>
-      <div className="w-full border-t bg-white">
+      <div className="w-full border-t bg-white relative z-10">
         <div className="max-w-3xl mx-auto">
           <ChatInput onSendMessage={handleSendMessage} isLoading={isLoading} />
         </div>
