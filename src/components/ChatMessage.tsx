@@ -27,11 +27,11 @@ const ChatMessage = memo(({ content, isUser, isTyping }: ChatMessageProps) => {
       >
         <p className="text-sm md:text-base whitespace-pre-wrap text-right" dir="rtl">
           {isTyping ? (
-            <span className="flex gap-1 items-center">
+            <span className="flex gap-1 items-center justify-end">
+              <span className="mr-1">מכין תשובה</span>
               <span className="animate-bounce delay-100">.</span>
               <span className="animate-bounce delay-200">.</span>
               <span className="animate-bounce delay-300">.</span>
-              <span className="mr-1">מכין תשובה</span>
             </span>
           ) : (
             content
