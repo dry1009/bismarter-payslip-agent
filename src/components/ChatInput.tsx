@@ -33,6 +33,11 @@ const ChatInput = ({ onSendMessage, isLoading }: ChatInputProps) => {
       // Scroll the page to make the input visible when the keyboard opens
       if (inputRef.current) {
         inputRef.current.scrollIntoView({ behavior: 'smooth' });
+        
+        // Force focus after a short delay
+        setTimeout(() => {
+          inputRef.current?.focus();
+        }, 50);
       }
     };
 
@@ -54,6 +59,15 @@ const ChatInput = ({ onSendMessage, isLoading }: ChatInputProps) => {
       inputRef.current.focus();
     }
   }, [isLoading]);
+
+  // Auto-focus when component mounts
+  useEffect(() => {
+    setTimeout(() => {
+      if (inputRef.current) {
+        inputRef.current.focus();
+      }
+    }, 500);
+  }, []);
 
   return (
     <form

@@ -50,7 +50,7 @@ const Chat = () => {
       // Force scroll to bottom when input is focused
       setTimeout(() => {
         window.scrollTo(0, document.body.scrollHeight);
-        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+        scrollToBottom();
       }, 300);
     };
 
@@ -63,6 +63,37 @@ const Chat = () => {
       inputElements.forEach(input => {
         input.removeEventListener('focus', handleFocusAndScroll);
       });
+    };
+  }, []);
+
+  // Improved keyboard handling for mobile
+  useEffect(() => {
+    const handleVisualViewportResize = () => {
+      if (window.visualViewport) {
+        // Check if the keyboard is open by comparing viewport height with window height
+        const isKeyboardOpen = window.visualViewport.height < window.innerHeight;
+        
+        if (isKeyboardOpen) {
+          // Scroll to the last message when keyboard opens
+          scrollToBottom();
+          
+          // Add a class to the body when keyboard is open
+          document.body.classList.add('keyboard-open');
+        } else {
+          document.body.classList.remove('keyboard-open');
+        }
+      }
+    };
+
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', handleVisualViewportResize);
+    }
+
+    return () => {
+      if (window.visualViewport) {
+        window.visualViewport.removeEventListener('resize', handleVisualViewportResize);
+      }
+      document.body.classList.remove('keyboard-open');
     };
   }, []);
 
@@ -96,6 +127,8 @@ const Chat = () => {
       toast.error("אירעה שגיאה בתקשורת עם הסוכן");
     } finally {
       setIsLoading(false);
+      // Ensure we scroll to bottom after loading completes
+      setTimeout(scrollToBottom, 100);
     }
   };
 
