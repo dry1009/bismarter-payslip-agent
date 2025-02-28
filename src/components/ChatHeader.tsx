@@ -11,7 +11,7 @@ const ChatHeader = () => {
     <header className="bg-white border-b border-gray-200 shadow-sm py-3 px-4">
       <div className="max-w-3xl mx-auto flex items-center justify-between">
         <div 
-          className="flex items-center space-x-2 cursor-pointer hover:opacity-80 transition-opacity"
+          className="flex items-center space-x-2 rtl:space-x-reverse cursor-pointer hover:opacity-80 transition-opacity"
           onClick={handleRefresh}
         >
           <Avatar className="h-7 w-7">

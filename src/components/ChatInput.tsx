@@ -25,6 +25,14 @@ const ChatInput = ({ onSendMessage, isLoading }: ChatInputProps) => {
       onSubmit={handleSubmit}
       className="flex items-center gap-2 p-3"
     >
+      <Button
+        type="submit"
+        size="icon"
+        disabled={isLoading || !message.trim()}
+        className="shrink-0"
+      >
+        <SendHorizontal className="h-5 w-5 transform rotate-180" />
+      </Button>
       <Input
         value={message}
         onChange={(e) => setMessage(e.target.value)}
@@ -33,14 +41,6 @@ const ChatInput = ({ onSendMessage, isLoading }: ChatInputProps) => {
         dir="rtl"
         disabled={isLoading}
       />
-      <Button
-        type="submit"
-        size="icon"
-        disabled={isLoading || !message.trim()}
-        className="shrink-0"
-      >
-        <SendHorizontal className="h-5 w-5" />
-      </Button>
     </form>
   );
 };

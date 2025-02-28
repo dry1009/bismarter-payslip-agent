@@ -14,7 +14,7 @@ const ChatMessage = memo(({ content, isUser, isTyping }: ChatMessageProps) => {
     <div
       className={cn(
         "flex w-full animate-message-appear mb-4",
-        isUser ? "justify-end" : "justify-start"
+        isUser ? "justify-start" : "justify-end"
       )}
     >
       <div
@@ -25,13 +25,13 @@ const ChatMessage = memo(({ content, isUser, isTyping }: ChatMessageProps) => {
             : "bg-chat-assistant text-gray-800"
         )}
       >
-        <p className="text-sm md:text-base whitespace-pre-wrap" dir="rtl">
+        <p className="text-sm md:text-base whitespace-pre-wrap text-right" dir="rtl">
           {isTyping ? (
-            <span className="flex gap-1 items-center justify-end">
-              <span className="mr-1">מכין תשובה</span>
-              <span className="animate-bounce delay-300">.</span>
-              <span className="animate-bounce delay-200">.</span>
+            <span className="flex gap-1 items-center">
               <span className="animate-bounce delay-100">.</span>
+              <span className="animate-bounce delay-200">.</span>
+              <span className="animate-bounce delay-300">.</span>
+              <span className="mr-1">מכין תשובה</span>
             </span>
           ) : (
             content
