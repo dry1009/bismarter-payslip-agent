@@ -10,6 +10,7 @@ const ChatHeader = () => {
   return (
     <header className="bg-white border-b border-gray-200 shadow-sm py-3 px-4">
       <div className="max-w-3xl mx-auto flex items-center justify-between">
+        <div className="text-gray-500 text-sm">שאל כל דבר</div>
         <div 
           className="flex items-center space-x-2 rtl:space-x-reverse cursor-pointer hover:opacity-80 transition-opacity"
           onClick={handleRefresh}
@@ -21,7 +22,6 @@ const ChatHeader = () => {
           </Avatar>
           <h1 className="text-gray-800 text-lg font-medium">הסוכן שלי</h1>
         </div>
-        <div className="text-gray-500 text-sm">שאל כל דבר</div>
       </div>
     </header>
   );
