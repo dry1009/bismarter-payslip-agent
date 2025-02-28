@@ -28,7 +28,7 @@ export async function sendMessage(userMessage: string): Promise<string> {
     const response = await fetch(API_URL, {
       method: "POST",
       headers: {
-        "Authorization": API_KEY,
+        "Authorization": `Bearer ${API_KEY}`,
         "Content-Type": "application/json"
       },
       body: JSON.stringify(body)
