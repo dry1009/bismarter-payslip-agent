@@ -88,7 +88,7 @@ const Chat = () => {
               </div>
               <h2 className="text-xl font-semibold mb-2 text-gray-800">ברוך הבא לצ'אט</h2>
               <p className="text-gray-500 max-w-sm">
-                שלח הודעה כדי להתחיל לשוחח עם הסוכן שלך
+                כאן תוכל לשאול כל שאלה שתרצה לגבי השכר שלך
               </p>
             </div>
           ) : (
