@@ -4,7 +4,6 @@ import { sendMessage } from "@/services/chatService";
 import ChatHeader from "./ChatHeader";
 import ChatMessage from "./ChatMessage";
 import ChatInput from "./ChatInput";
-import ChatSuggestions from "./ChatSuggestions";
 import { toast } from "sonner";
 
 interface Message {
@@ -133,10 +132,6 @@ const Chat = () => {
     }
   };
 
-  const handleSuggestionClick = (suggestion: string) => {
-    handleSendMessage(suggestion);
-  };
-
   return (
     <div className="flex flex-col h-full w-full bg-gray-50">
       <ChatHeader />
@@ -152,12 +147,9 @@ const Chat = () => {
                 <span className="text-2xl">👋</span>
               </div>
               <h2 className="text-xl font-semibold mb-2 text-gray-800">ברוך הבא טילור</h2>
-              <p className="text-gray-500 max-w-sm mb-8">
+              <p className="text-gray-500 max-w-sm">
                 כאן תוכלי לשאול כל שאלה שתרצי לגבי תלושי השכר שלך
               </p>
-              
-              {/* Display suggestion boxes */}
-              <ChatSuggestions onSuggestionClick={handleSuggestionClick} />
             </div>
           ) : (
             messages.map((message, index) => (
