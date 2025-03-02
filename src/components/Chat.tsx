@@ -5,6 +5,7 @@ import ChatHeader from "./ChatHeader";
 import ChatMessage from "./ChatMessage";
 import ChatInput from "./ChatInput";
 import { toast } from "sonner";
+import { Button } from "./ui/button";
 
 interface Message {
   content: string;
@@ -12,11 +13,44 @@ interface Message {
   timestamp: Date;
 }
 
+interface SuggestionTopic {
+  name: string;
+  questions: string[];
+}
+
 const Chat = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
+
+  // Define suggestion topics with questions
+  const suggestionTopics: SuggestionTopic[] = [
+    {
+      name: "שכר",
+      questions: [
+        "כמה היתה המשכורת שלי החודש?",
+        "כמה קיבלתי בחודש הקודם?",
+        "למה תוספת סכום מסוים מהשכר שלי?",
+      ]
+    },
+    {
+      name: "ניכויים",
+      questions: [
+        "איך מחושב שכר הנטו שלי?",
+        "מה גובה הניכויים בתלוש האחרון?",
+        "למה יש ניכוי חדש בתלוש שלי?"
+      ]
+    },
+    {
+      name: "הטבות",
+      questions: [
+        "אילו הטבות כלולות בתלוש שלי?",
+        "האם אני זכאי להחזרי נסיעות?",
+        "כיצד מחושבות שעות נוספות?"
+      ]
+    }
+  ];
 
   // Scroll to bottom whenever messages change
   const scrollToBottom = () => {
@@ -132,6 +166,10 @@ const Chat = () => {
     }
   };
 
+  const handleSuggestionClick = (question: string) => {
+    handleSendMessage(question);
+  };
+
   return (
     <div className="flex flex-col h-full w-full bg-gray-50">
       <ChatHeader />
@@ -142,14 +180,34 @@ const Chat = () => {
       >
         <div className="max-w-3xl mx-auto space-y-4 pt-4">
           {messages.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-full text-center p-8 pt-16">
+            <div className="flex flex-col items-center justify-center h-full text-center p-4 pt-12">
               <div className="w-16 h-16 mb-4 rounded-full bg-gray-100 flex items-center justify-center">
                 <span className="text-2xl">👋</span>
               </div>
               <h2 className="text-xl font-semibold mb-2 text-gray-800">ברוך הבא טילור</h2>
-              <p className="text-gray-500 max-w-sm">
-                כאן תוכלי לשאול כל שאלה שתרצי לגבי תלושי השכר שלך
+              <p className="text-gray-500 max-w-sm mb-8">
+                כאן תוכל לשאול כל שאלה שתרצה לגבי תלושי השכר שלך
               </p>
+              
+              {/* Suggestion boxes by topic */}
+              <div className="w-full max-w-3xl">
+                {suggestionTopics.map((topic, topicIndex) => (
+                  <div key={topicIndex} className="mb-6">
+                    <h3 className="text-md font-medium text-gray-700 mb-3">{topic.name}</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      {topic.questions.map((question, questionIndex) => (
+                        <button
+                          key={questionIndex}
+                          onClick={() => handleSuggestionClick(question)}
+                          className="bg-gray-900 text-white hover:bg-gray-800 transition-colors text-right p-4 rounded-xl border border-gray-800"
+                        >
+                          {question}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           ) : (
             messages.map((message, index) => (
