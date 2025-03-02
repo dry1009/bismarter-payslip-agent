@@ -24,10 +24,3 @@ body.keyboard-open .flex-1.overflow-y-auto {
     transition: padding-bottom 0.3s ease;
   }
 }
-
-/* Suggestion boxes animation */
-.bg-gray-900:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  transition: all 0.2s ease;
-}
