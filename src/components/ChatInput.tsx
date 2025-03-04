@@ -28,32 +28,7 @@ const ChatInput = ({ onSendMessage, isLoading }: ChatInputProps) => {
     }
   };
 
-  useEffect(() => {
-    const handleVisualViewportResize = () => {
-      // Scroll the page to make the input visible when the keyboard opens
-      if (inputRef.current) {
-        inputRef.current.scrollIntoView({ behavior: 'smooth' });
-        
-        // Force focus after a short delay
-        setTimeout(() => {
-          inputRef.current?.focus();
-        }, 50);
-      }
-    };
-
-    // Modern browsers support visualViewport API
-    if (window.visualViewport) {
-      window.visualViewport.addEventListener('resize', handleVisualViewportResize);
-    }
-
-    return () => {
-      if (window.visualViewport) {
-        window.visualViewport.removeEventListener('resize', handleVisualViewportResize);
-      }
-    };
-  }, []);
-
-  // ממקד את תיבת הטקסט אחרי שינוי מצב הטעינה
+  // Auto-focus when component mounts or loading stops
   useEffect(() => {
     if (!isLoading && inputRef.current) {
       inputRef.current.focus();

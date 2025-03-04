@@ -1,3 +1,4 @@
+
 import { useEffect, useRef, useState } from "react";
 import { sendMessage, Message, getChatHistory, saveChatHistory, resetConversation } from "@/services/chatService";
 import ChatHeader from "./ChatHeader";
@@ -45,26 +46,6 @@ const Chat = () => {
     return () => {
       window.removeEventListener('resize', setViewHeight);
       window.removeEventListener('orientationchange', setViewHeight);
-    };
-  }, []);
-
-  useEffect(() => {
-    const handleFocusAndScroll = () => {
-      setTimeout(() => {
-        window.scrollTo(0, document.body.scrollHeight);
-        scrollToBottom();
-      }, 300);
-    };
-
-    const inputElements = document.querySelectorAll('input');
-    inputElements.forEach(input => {
-      input.addEventListener('focus', handleFocusAndScroll);
-    });
-
-    return () => {
-      inputElements.forEach(input => {
-        input.removeEventListener('focus', handleFocusAndScroll);
-      });
     };
   }, []);
 
