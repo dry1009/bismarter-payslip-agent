@@ -139,121 +139,37 @@
   @apply whitespace-pre-wrap;
 }
 
-/* Compact Markdown Styling - reduces all spacing */
-.compact-markdown h1,
-.compact-markdown h2,
-.compact-markdown h3,
-.compact-markdown h4,
-.compact-markdown h5,
-.compact-markdown h6 {
-  @apply font-bold text-gray-900 mb-1 mt-1;
-}
-
-.compact-markdown h1 {
-  @apply text-xl;
-}
-
-.compact-markdown h2 {
-  @apply text-lg;
-}
-
-.compact-markdown h3 {
-  @apply text-base;
-}
-
-.compact-markdown p {
-  @apply mb-1 leading-normal;
-}
-
-.compact-markdown ul,
-.compact-markdown ol {
-  @apply mb-1 pr-4 space-y-0;
-}
-
-.compact-markdown ul {
-  @apply list-disc;
-}
-
-.compact-markdown ol {
-  @apply list-decimal;
-}
-
-.compact-markdown li {
-  @apply mb-0 leading-normal;
-}
-
-.compact-markdown li > p {
-  @apply mb-0;
-}
-
-.compact-markdown li:last-child {
-  @apply mb-0;
-}
-
-.compact-markdown blockquote {
-  @apply border-r-4 border-gray-300 pr-3 py-0.5 my-1 text-gray-600;
-}
-
-.compact-markdown pre,
-.compact-markdown code {
+.markdown-content pre,
+.markdown-content code {
   direction: ltr;
   display: block;
   text-align: left;
 }
 
-.compact-markdown pre {
-  @apply bg-gray-100 p-2 rounded my-1 overflow-x-auto;
+.markdown-content table {
+  @apply w-full my-2 border-collapse;
 }
 
-.compact-markdown code {
-  @apply bg-gray-100 px-1 rounded;
+.markdown-content th,
+.markdown-content td {
+  @apply border border-gray-300 p-1;
 }
 
-.compact-markdown table {
-  @apply w-full my-1 border-collapse;
-  direction: ltr;
+.markdown-content hr {
+  @apply my-4 border-t border-gray-300;
 }
 
-.compact-markdown th {
-  @apply bg-gray-50 px-2 py-1 text-gray-700 font-medium border border-gray-200;
-}
-
-.compact-markdown td {
-  @apply border border-gray-200 px-2 py-1;
-}
-
-.compact-markdown tr:nth-child(even) {
-  @apply bg-gray-50/50;
-}
-
-.compact-markdown hr {
-  @apply my-1 border-t border-gray-300;
-}
-
-.compact-markdown a {
+.markdown-content a {
   @apply text-blue-600 underline;
 }
 
-/* Adjacent headings and lists should have less spacing */
-.compact-markdown h1 + p,
-.compact-markdown h2 + p,
-.compact-markdown h3 + p {
-  @apply mt-0.5;
-}
-
-.compact-markdown p + ul,
-.compact-markdown p + ol {
-  @apply mt-0.5;
-}
-
-.compact-markdown ul + p,
-.compact-markdown ol + p {
-  @apply mt-0.5;
-}
-
-/* Enhanced spacing for bulleted lists */
-.compact-markdown li {
-  @apply relative;
+/* Clean slate for mobile-first approach */
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
 }
 
 /* Fix for mobile browsers */
