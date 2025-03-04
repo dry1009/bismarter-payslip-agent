@@ -45,7 +45,7 @@ const ChatMessage = memo(({
           }) => <ol className="mb-0.5 pr-2 list-decimal space-y-0">{children}</ol>,
           li: ({
             children
-          }) => <li className="mb-0 py-0 leading-tight my-[7px]">{children}</li>,
+          }) => <li className="mb-0 py-0 leading-tight my-[13px]">{children}</li>,
           strong: ({
             children
           }) => <strong className="font-bold">{children}</strong>,
