@@ -1,6 +1,7 @@
 
 import { cn } from "@/lib/utils";
 import { memo } from "react";
+import ReactMarkdown from "react-markdown";
 
 interface ChatMessageProps {
   content: string;
@@ -25,18 +26,48 @@ const ChatMessage = memo(({ content, isUser, isTyping }: ChatMessageProps) => {
             : "bg-chat-assistant text-gray-800"
         )}
       >
-        <p className="text-sm md:text-base whitespace-pre-wrap text-right" dir="rtl">
-          {isTyping ? (
+        {isTyping ? (
+          <p className="text-sm md:text-base whitespace-pre-wrap text-right" dir="rtl">
             <span className="flex gap-1 items-center justify-end">
               <span className="mr-1">מכין תשובה</span>
               <span className="animate-bounce delay-100">.</span>
               <span className="animate-bounce delay-200">.</span>
               <span className="animate-bounce delay-300">.</span>
             </span>
-          ) : (
-            content
-          )}
-        </p>
+          </p>
+        ) : isUser ? (
+          <p className="text-sm md:text-base whitespace-pre-wrap text-right" dir="rtl">
+            {content}
+          </p>
+        ) : (
+          <div className="markdown-content text-sm md:text-base text-right" dir="rtl">
+            <ReactMarkdown
+              components={{
+                // Override default components with properly styled ones
+                p: ({ children }) => <p className="mb-2 last:mb-0">{children}</p>,
+                h1: ({ children }) => <h1 className="text-xl font-bold mb-2">{children}</h1>,
+                h2: ({ children }) => <h2 className="text-lg font-bold mb-2">{children}</h2>,
+                h3: ({ children }) => <h3 className="text-md font-bold mb-1">{children}</h3>,
+                ul: ({ children }) => <ul className="mb-2 pr-5 list-disc">{children}</ul>,
+                ol: ({ children }) => <ol className="mb-2 pr-5 list-decimal">{children}</ol>,
+                li: ({ children }) => <li className="mb-1">{children}</li>,
+                strong: ({ children }) => <strong className="font-bold">{children}</strong>,
+                em: ({ children }) => <em className="italic">{children}</em>,
+                blockquote: ({ children }) => (
+                  <blockquote className="border-r-4 border-gray-300 pr-2 my-2 text-gray-600">
+                    {children}
+                  </blockquote>
+                ),
+                code: ({ children }) => <code className="bg-gray-100 px-1 rounded">{children}</code>,
+                pre: ({ children }) => (
+                  <pre className="bg-gray-100 p-2 rounded my-2 overflow-x-auto rtl:text-left ltr:text-left whitespace-pre">{children}</pre>
+                ),
+              }}
+            >
+              {content}
+            </ReactMarkdown>
+          </div>
+        )}
       </div>
     </div>
   );
