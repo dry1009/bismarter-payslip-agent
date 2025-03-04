@@ -3,11 +3,7 @@ import { motion } from "framer-motion";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { useState, useEffect } from "react";
 
-interface ChatHeaderProps {
-  userName?: string | null;
-}
-
-const ChatHeader = ({ userName }: ChatHeaderProps) => {
+const ChatHeader = () => {
   const [imageLoaded, setImageLoaded] = useState(false);
   
   useEffect(() => {
@@ -24,9 +20,7 @@ const ChatHeader = ({ userName }: ChatHeaderProps) => {
   return (
     <header className="bg-white border-b border-gray-200 shadow-sm py-3 px-4">
       <div className="max-w-3xl mx-auto flex items-center justify-between">
-        <div className="text-gray-500 text-sm">
-          {userName ? `שלום ${userName}, שאל כל דבר לגבי השכר שלך` : 'שאל כל דבר לגבי השכר שלך'}
-        </div>
+        <div className="text-gray-500 text-sm">שאל כל דבר לגבי השכר שלך</div>
         <div 
           className="flex items-center cursor-pointer hover:opacity-80 transition-opacity"
           onClick={handleRefresh}

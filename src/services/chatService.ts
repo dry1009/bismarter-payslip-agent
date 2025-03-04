@@ -14,15 +14,6 @@ const API_KEY = "3961acc7-db32-4be4-89fd-ddec1df3da47";
 const CHATBOT_ID = "aS-hBVetFBBnqDa2V_pU8";
 const API_URL = "https://www.chatbase.co/api/v1/chat";
 
-// Get or set user name
-export function getUserName(): string | null {
-  return localStorage.getItem("chatUserName");
-}
-
-export function setUserName(name: string): void {
-  localStorage.setItem("chatUserName", name);
-}
-
 // Generate a unique conversation ID or retrieve from localStorage
 export function getConversationId(): string {
   let conversationId = localStorage.getItem("chatConversationId");
@@ -35,16 +26,10 @@ export function getConversationId(): string {
   return conversationId;
 }
 
-// Check if this is the first visit
-export function isFirstVisit(): boolean {
-  return localStorage.getItem("chatUserName") === null;
-}
-
 // Reset conversation (for starting fresh)
 export function resetConversation(): void {
   localStorage.removeItem("chatConversationId");
   localStorage.removeItem("chatHistory");
-  // Don't remove the username when resetting conversation
 }
 
 // Get stored chat history or initialize empty array
@@ -81,18 +66,11 @@ export async function sendMessage(userMessage: string, history: Message[] = []):
     // Format messages for API
     const apiMessages = formatMessagesForApi(updatedHistory);
 
-    // Get user name
-    const userName = getUserName();
-    
-    // Create metadata object for the API request
-    const metadata = userName ? { user_name: userName } : {};
-
     const body = {
       chatbotId: CHATBOT_ID,
       conversationId: conversationId,
       stream: false,
-      messages: apiMessages,
-      metadata: metadata
+      messages: apiMessages
     };
 
     const response = await fetch(API_URL, {

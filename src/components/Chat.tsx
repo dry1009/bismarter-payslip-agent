@@ -1,34 +1,16 @@
 
 import { useEffect, useRef, useState } from "react";
-import { 
-  sendMessage, 
-  Message, 
-  getChatHistory, 
-  saveChatHistory, 
-  isFirstVisit, 
-  setUserName, 
-  getUserName 
-} from "@/services/chatService";
+import { sendMessage, Message, getChatHistory, saveChatHistory } from "@/services/chatService";
 import ChatHeader from "./ChatHeader";
 import ChatMessage from "./ChatMessage";
 import ChatInput from "./ChatInput";
-import WelcomeDialog from "./WelcomeDialog";
 import { toast } from "sonner";
 
 const Chat = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [showWelcome, setShowWelcome] = useState(false);
-  const [userName, setUserNameState] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
-
-  // Check if this is the first visit
-  useEffect(() => {
-    const firstVisit = isFirstVisit();
-    setShowWelcome(firstVisit);
-    setUserNameState(getUserName());
-  }, []);
 
   // Initialize messages from stored chat history
   useEffect(() => {
@@ -44,14 +26,6 @@ const Chat = () => {
       saveChatHistory(messages);
     }
   }, [messages]);
-
-  // Handle welcome dialog close
-  const handleWelcomeClose = (name: string) => {
-    setUserName(name);
-    setUserNameState(name);
-    setShowWelcome(false);
-    toast.success(`ברוך הבא, ${name}!`);
-  };
 
   // Scroll to bottom whenever messages change
   const scrollToBottom = () => {
@@ -171,10 +145,7 @@ const Chat = () => {
 
   return (
     <div className="flex flex-col h-full w-full bg-gray-50">
-      {/* Welcome Dialog */}
-      <WelcomeDialog open={showWelcome} onClose={handleWelcomeClose} />
-      
-      <ChatHeader userName={userName} />
+      <ChatHeader />
       <div 
         ref={chatContainerRef}
         className="flex-1 overflow-y-auto px-4 pb-4" 
@@ -186,11 +157,9 @@ const Chat = () => {
               <div className="w-16 h-16 mb-4 rounded-full bg-gray-100 flex items-center justify-center">
                 <span className="text-2xl">👋</span>
               </div>
-              <h2 className="text-xl font-semibold mb-2 text-gray-800">
-                {userName ? `ברוך הבא ${userName}` : 'ברוך הבא'}
-              </h2>
+              <h2 className="text-xl font-semibold mb-2 text-gray-800">ברוך הבא טילור</h2>
               <p className="text-gray-500 max-w-sm">
-                כאן תוכל/י לשאול כל שאלה שתרצה/י לגבי תלושי השכר שלך
+                כאן תוכלי לשאול כל שאלה שתרצי לגבי תלושי השכר שלך
               </p>
             </div>
           ) : (
