@@ -1,4 +1,3 @@
-
 import { useEffect, useRef, useState } from "react";
 import { sendMessage, Message, getChatHistory, saveChatHistory, resetConversation } from "@/services/chatService";
 import ChatHeader from "./ChatHeader";
@@ -141,8 +140,7 @@ const Chat = () => {
         border: "1px solid #e5e7eb"
       },
       closeButton: false,
-      icon: "🔄",
-      showProgress: true
+      icon: "🔄"
     });
   };
 
