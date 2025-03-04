@@ -28,7 +28,32 @@ const ChatInput = ({ onSendMessage, isLoading }: ChatInputProps) => {
     }
   };
 
-  // Auto-focus when component mounts or loading stops
+  useEffect(() => {
+    const handleVisualViewportResize = () => {
+      // Scroll the page to make the input visible when the keyboard opens
+      if (inputRef.current) {
+        inputRef.current.scrollIntoView({ behavior: 'smooth' });
+        
+        // Force focus after a short delay
+        setTimeout(() => {
+          inputRef.current?.focus();
+        }, 50);
+      }
+    };
+
+    // Modern browsers support visualViewport API
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', handleVisualViewportResize);
+    }
+
+    return () => {
+      if (window.visualViewport) {
+        window.visualViewport.removeEventListener('resize', handleVisualViewportResize);
+      }
+    };
+  }, []);
+
+  // ממקד את תיבת הטקסט אחרי שינוי מצב הטעינה
   useEffect(() => {
     if (!isLoading && inputRef.current) {
       inputRef.current.focus();
@@ -37,21 +62,11 @@ const ChatInput = ({ onSendMessage, isLoading }: ChatInputProps) => {
 
   // Auto-focus when component mounts
   useEffect(() => {
-    // Detect iOS device and add a class to the body
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
-    if (isIOS) {
-      document.body.classList.add('ios');
-    }
-    
     setTimeout(() => {
       if (inputRef.current) {
         inputRef.current.focus();
       }
     }, 500);
-    
-    return () => {
-      document.body.classList.remove('ios');
-    };
   }, []);
 
   return (
@@ -75,7 +90,6 @@ const ChatInput = ({ onSendMessage, isLoading }: ChatInputProps) => {
         className="flex-1 text-right"
         dir="rtl"
         disabled={isLoading}
-        autoComplete="off"
       />
     </form>
   );
