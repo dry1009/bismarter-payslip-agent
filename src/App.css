@@ -13,16 +13,36 @@ html, body, #root {
   height: 100dvh; /* Dynamic viewport height */
 }
 
-/* Keyboard open state */
-body.keyboard-open .flex-1.overflow-y-auto {
-  padding-bottom: 200px; /* Add extra padding when keyboard is open */
+/* Keyboard detection classes */
+.keyboard-visible .chat-container {
+  padding-bottom: var(--keyboard-height, 270px);
+}
+
+.keyboard-visible .input-container {
+  position: fixed;
+  bottom: var(--keyboard-offset, 0px);
+  left: 0;
+  right: 0;
+  background-color: white;
+  z-index: 50;
+  border-top: 1px solid #e5e7eb;
+}
+
+/* iOS specific fixes */
+@supports (-webkit-touch-callout: none) {
+  .keyboard-visible .input-container {
+    position: fixed;
+    bottom: 0;
+  }
 }
 
 /* Smoother transitions */
-@media (max-width: 768px) {
-  .flex-1.overflow-y-auto {
-    transition: padding-bottom 0.3s ease;
-  }
+.chat-container {
+  transition: padding-bottom 0.2s ease-out;
+}
+
+.input-container {
+  transition: bottom 0.2s ease-out;
 }
 
 /* RTL Toast styling */

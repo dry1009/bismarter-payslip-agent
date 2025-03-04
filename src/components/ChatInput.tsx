@@ -7,9 +7,10 @@ import { useState, FormEvent, useEffect, useRef } from "react";
 interface ChatInputProps {
   onSendMessage: (message: string) => void;
   isLoading: boolean;
+  keyboardHeight?: number;
 }
 
-const ChatInput = ({ onSendMessage, isLoading }: ChatInputProps) => {
+const ChatInput = ({ onSendMessage, isLoading, keyboardHeight = 0 }: ChatInputProps) => {
   const [message, setMessage] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -19,7 +20,7 @@ const ChatInput = ({ onSendMessage, isLoading }: ChatInputProps) => {
       onSendMessage(message);
       setMessage("");
       
-      // התמקד בשדה הקלט מחדש לאחר שליחת ההודעה
+      // Focus the input after sending
       setTimeout(() => {
         if (inputRef.current) {
           inputRef.current.focus();
@@ -27,38 +28,6 @@ const ChatInput = ({ onSendMessage, isLoading }: ChatInputProps) => {
       }, 100);
     }
   };
-
-  useEffect(() => {
-    const handleVisualViewportResize = () => {
-      // Scroll the page to make the input visible when the keyboard opens
-      if (inputRef.current) {
-        inputRef.current.scrollIntoView({ behavior: 'smooth' });
-        
-        // Force focus after a short delay
-        setTimeout(() => {
-          inputRef.current?.focus();
-        }, 50);
-      }
-    };
-
-    // Modern browsers support visualViewport API
-    if (window.visualViewport) {
-      window.visualViewport.addEventListener('resize', handleVisualViewportResize);
-    }
-
-    return () => {
-      if (window.visualViewport) {
-        window.visualViewport.removeEventListener('resize', handleVisualViewportResize);
-      }
-    };
-  }, []);
-
-  // ממקד את תיבת הטקסט אחרי שינוי מצב הטעינה
-  useEffect(() => {
-    if (!isLoading && inputRef.current) {
-      inputRef.current.focus();
-    }
-  }, [isLoading]);
 
   // Auto-focus when component mounts
   useEffect(() => {
