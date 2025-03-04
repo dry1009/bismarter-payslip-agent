@@ -1,4 +1,3 @@
-
 import { useEffect, useRef, useState } from "react";
 import { sendMessage, Message, getChatHistory, saveChatHistory, resetConversation } from "@/services/chatService";
 import ChatHeader from "./ChatHeader";
@@ -99,11 +98,8 @@ const Chat = () => {
   const handleSendMessage = async (content: string) => {
     if (content.trim() === "") return;
 
-    // Clean up the content by removing excessive newlines before sending
-    const cleanedContent = content.replace(/\n{3,}/g, '\n\n');
-
     const userMessage: Message = {
-      content: cleanedContent,
+      content,
       role: "user",
       timestamp: new Date()
     };
@@ -112,13 +108,10 @@ const Chat = () => {
     setIsLoading(true);
 
     try {
-      const response = await sendMessage(cleanedContent, messages);
-      
-      // Clean up any excessive newlines in the response
-      const cleanedResponse = response.replace(/\n{3,}/g, '\n\n');
+      const response = await sendMessage(content, messages);
       
       const agentMessage: Message = {
-        content: cleanedResponse,
+        content: response,
         role: "agent",
         timestamp: new Date()
       };

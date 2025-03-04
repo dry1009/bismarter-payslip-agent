@@ -130,145 +130,130 @@
     @apply text-xl font-semibold tracking-tight;
   }
   p {
-    @apply leading-tight;
+    @apply leading-7;
   }
 }
 
 /* Markdown Styling */
 .markdown-content {
-  @apply break-words;
+  @apply whitespace-pre-wrap;
 }
 
-/* Dense Markdown Styling - reduces all spacing */
-.dense-markdown h1,
-.dense-markdown h2,
-.dense-markdown h3,
-.dense-markdown h4,
-.dense-markdown h5,
-.dense-markdown h6 {
-  @apply font-bold text-gray-900 mb-0.5 mt-0.5 leading-tight;
+/* Compact Markdown Styling - reduces all spacing */
+.compact-markdown h1,
+.compact-markdown h2,
+.compact-markdown h3,
+.compact-markdown h4,
+.compact-markdown h5,
+.compact-markdown h6 {
+  @apply font-bold text-gray-900 mb-1 mt-1;
 }
 
-.dense-markdown h1 {
+.compact-markdown h1 {
   @apply text-xl;
 }
 
-.dense-markdown h2 {
+.compact-markdown h2 {
   @apply text-lg;
 }
 
-.dense-markdown h3 {
+.compact-markdown h3 {
   @apply text-base;
 }
 
-.dense-markdown p {
-  @apply mb-0.5 leading-tight;
+.compact-markdown p {
+  @apply mb-1 leading-normal;
 }
 
-.dense-markdown p:last-child {
-  @apply mb-0;
+.compact-markdown ul,
+.compact-markdown ol {
+  @apply mb-1 pr-4 space-y-0;
 }
 
-.dense-markdown ul,
-.dense-markdown ol {
-  @apply mb-0.5 pr-2 space-y-0;
-}
-
-.dense-markdown ul {
+.compact-markdown ul {
   @apply list-disc;
 }
 
-.dense-markdown ol {
+.compact-markdown ol {
   @apply list-decimal;
 }
 
-.dense-markdown li {
-  @apply mb-0 leading-tight;
+.compact-markdown li {
+  @apply mb-0 leading-normal;
 }
 
-.dense-markdown li > p {
-  @apply mb-0 leading-tight inline;
-}
-
-.dense-markdown li:last-child {
+.compact-markdown li > p {
   @apply mb-0;
 }
 
-.dense-markdown blockquote {
-  @apply border-r-4 border-gray-300 pr-2 py-0.5 my-0.5 text-gray-600;
+.compact-markdown li:last-child {
+  @apply mb-0;
 }
 
-.dense-markdown pre,
-.dense-markdown code {
+.compact-markdown blockquote {
+  @apply border-r-4 border-gray-300 pr-3 py-0.5 my-1 text-gray-600;
+}
+
+.compact-markdown pre,
+.compact-markdown code {
   direction: ltr;
   display: block;
   text-align: left;
 }
 
-.dense-markdown pre {
-  @apply bg-gray-100 p-1.5 rounded my-0.5 overflow-x-auto;
+.compact-markdown pre {
+  @apply bg-gray-100 p-2 rounded my-1 overflow-x-auto;
 }
 
-.dense-markdown code {
+.compact-markdown code {
   @apply bg-gray-100 px-1 rounded;
 }
 
-.dense-markdown table {
-  @apply w-full my-0.5 border-collapse;
+.compact-markdown table {
+  @apply w-full my-1 border-collapse;
   direction: ltr;
 }
 
-.dense-markdown th {
-  @apply bg-gray-50 px-1 py-0.5 text-gray-700 font-medium border border-gray-200;
+.compact-markdown th {
+  @apply bg-gray-50 px-2 py-1 text-gray-700 font-medium border border-gray-200;
 }
 
-.dense-markdown td {
-  @apply border border-gray-200 px-1 py-0.5;
+.compact-markdown td {
+  @apply border border-gray-200 px-2 py-1;
 }
 
-.dense-markdown tr:nth-child(even) {
+.compact-markdown tr:nth-child(even) {
   @apply bg-gray-50/50;
 }
 
-.dense-markdown hr {
-  @apply my-0.5 border-t border-gray-300;
+.compact-markdown hr {
+  @apply my-1 border-t border-gray-300;
 }
 
-.dense-markdown a {
+.compact-markdown a {
   @apply text-blue-600 underline;
 }
 
-/* Tax breakdown and structured content specific styles */
-.dense-markdown ul li:has(strong:first-child),
-.dense-markdown ol li:has(strong:first-child) {
-  @apply mb-0 leading-tight;
+/* Adjacent headings and lists should have less spacing */
+.compact-markdown h1 + p,
+.compact-markdown h2 + p,
+.compact-markdown h3 + p {
+  @apply mt-0.5;
 }
 
-.dense-markdown ul li strong:first-child,
-.dense-markdown ol li strong:first-child {
-  @apply inline-block min-w-[120px];
+.compact-markdown p + ul,
+.compact-markdown p + ol {
+  @apply mt-0.5;
 }
 
-/* Adjacent elements should have minimal spacing */
-.dense-markdown h1 + p,
-.dense-markdown h2 + p,
-.dense-markdown h3 + p {
-  @apply mt-0;
+.compact-markdown ul + p,
+.compact-markdown ol + p {
+  @apply mt-0.5;
 }
 
-.dense-markdown p + ul,
-.dense-markdown p + ol {
-  @apply mt-0;
-}
-
-.dense-markdown ul + p,
-.dense-markdown ol + p {
-  @apply mt-0;
-}
-
-/* Remove double spacing in lists */
-.dense-markdown li + li {
-  @apply mt-0;
+/* Enhanced spacing for bulleted lists */
+.compact-markdown li {
+  @apply relative;
 }
 
 /* Fix for mobile browsers */
