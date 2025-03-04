@@ -35,25 +35,3 @@ body.keyboard-open .flex-1.overflow-y-auto {
 .sonner-toast[data-styled="true"] {
   animation: scale-in 0.2s ease-out;
 }
-
-/* Custom toast progress bar */
-.rtl-toast::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  width: 100%;
-  height: 3px;
-  background-color: rgba(79, 70, 229, 0.4);
-  animation: progress-bar 2s linear forwards;
-  transform-origin: right;
-}
-
-@keyframes progress-bar {
-  from {
-    transform: scaleX(1);
-  }
-  to {
-    transform: scaleX(0);
-  }
-}
