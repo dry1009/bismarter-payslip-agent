@@ -40,7 +40,7 @@ const ChatMessage = memo(({ content, isUser, isTyping }: ChatMessageProps) => {
             {content}
           </p>
         ) : (
-          <div className="markdown-content text-sm md:text-base text-right compact-markdown" dir="rtl">
+          <div className="markdown-content text-sm md:text-base text-right" dir="rtl">
             <ReactMarkdown
               components={{
                 p: ({ children }) => <p className="mb-1 last:mb-0">{children}</p>,

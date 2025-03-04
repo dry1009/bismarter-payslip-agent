@@ -43,6 +43,10 @@
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* Added missing variables for the chat component */
+    --chat-user: 228 72% 50%;
+    --chat-assistant: 0 0% 96%;
   }
 
   .dark {
@@ -81,6 +85,10 @@
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* Added missing variables for the chat component in dark mode */
+    --chat-user: 217 92% 76%;
+    --chat-assistant: 215 28% 17%;
   }
 }
 
@@ -304,4 +312,20 @@ body.keyboard-open .flex-1.overflow-y-auto {
   to {
     transform: scaleX(0);
   }
+}
+
+/* Add animation for message appearance */
+@keyframes message-appear {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-message-appear {
+  animation: message-appear 0.3s ease-out forwards;
 }
