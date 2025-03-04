@@ -8,4 +8,52 @@ html, body, #root {
   overflow: hidden;
 }
 
-/* Additional app-specific styles can go here if needed */
+/* Fix for mobile browsers */
+.h-[100dvh] {
+  height: 100dvh; /* Dynamic viewport height */
+}
+
+/* Keyboard open state */
+body.keyboard-open .flex-1.overflow-y-auto {
+  padding-bottom: 200px; /* Add extra padding when keyboard is open */
+}
+
+/* Smoother transitions */
+@media (max-width: 768px) {
+  .flex-1.overflow-y-auto {
+    transition: padding-bottom 0.3s ease;
+  }
+}
+
+/* RTL Toast styling */
+.rtl-toast {
+  direction: rtl;
+  text-align: right;
+}
+
+/* Toast progress bar animation */
+.sonner-toast[data-styled="true"] {
+  animation: scale-in 0.2s ease-out;
+}
+
+/* Custom toast progress bar */
+.rtl-toast::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  height: 3px;
+  background-color: rgba(79, 70, 229, 0.4);
+  animation: progress-bar 2s linear forwards;
+  transform-origin: right;
+}
+
+@keyframes progress-bar {
+  from {
+    transform: scaleX(1);
+  }
+  to {
+    transform: scaleX(0);
+  }
+}
