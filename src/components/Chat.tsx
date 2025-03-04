@@ -141,7 +141,8 @@ const Chat = () => {
         border: "1px solid #e5e7eb"
       },
       closeButton: false,
-      icon: "🔄"
+      icon: "🔄",
+      showProgress: true
     });
   };
 
