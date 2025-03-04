@@ -1,22 +1,31 @@
 
 import { useEffect, useRef, useState } from "react";
-import { sendMessage } from "@/services/chatService";
+import { sendMessage, Message, getChatHistory, saveChatHistory } from "@/services/chatService";
 import ChatHeader from "./ChatHeader";
 import ChatMessage from "./ChatMessage";
 import ChatInput from "./ChatInput";
 import { toast } from "sonner";
-
-interface Message {
-  content: string;
-  isUser: boolean;
-  timestamp: Date;
-}
 
 const Chat = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
+
+  // Initialize messages from stored chat history
+  useEffect(() => {
+    const storedMessages = getChatHistory();
+    if (storedMessages.length > 0) {
+      setMessages(storedMessages);
+    }
+  }, []);
+
+  // Save messages to localStorage whenever they change
+  useEffect(() => {
+    if (messages.length > 0) {
+      saveChatHistory(messages);
+    }
+  }, [messages]);
 
   // Scroll to bottom whenever messages change
   const scrollToBottom = () => {
@@ -103,24 +112,26 @@ const Chat = () => {
     // Add user message
     const userMessage: Message = {
       content,
-      isUser: true,
+      role: "user",
       timestamp: new Date()
     };
     
+    // Update UI with user message
     setMessages(prev => [...prev, userMessage]);
     setIsLoading(true);
 
     try {
-      // Send message to API and get response
-      const response = await sendMessage(content);
+      // Send message to API with full conversation history
+      const response = await sendMessage(content, messages);
       
       // Add agent response
       const agentMessage: Message = {
         content: response,
-        isUser: false,
+        role: "agent",
         timestamp: new Date()
       };
       
+      // Update UI with agent response
       setMessages(prev => [...prev, agentMessage]);
     } catch (error) {
       console.error("Error in chat exchange:", error);
@@ -156,7 +167,7 @@ const Chat = () => {
               <ChatMessage
                 key={index}
                 content={message.content}
-                isUser={message.isUser}
+                isUser={message.role === "user"}
               />
             ))
           )}

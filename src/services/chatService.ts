@@ -1,7 +1,9 @@
 
 import { toast } from "sonner";
+import { v4 as uuidv4 } from "uuid";
 
-interface Message {
+// Message interface to match what we need for both UI and API
+export interface Message {
   role: "user" | "agent";
   content: string;
   timestamp: Date;
@@ -12,17 +14,63 @@ const API_KEY = "3961acc7-db32-4be4-89fd-ddec1df3da47";
 const CHATBOT_ID = "aS-hBVetFBBnqDa2V_pU8";
 const API_URL = "https://www.chatbase.co/api/v1/chat";
 
-export async function sendMessage(userMessage: string): Promise<string> {
+// Generate a unique conversation ID or retrieve from localStorage
+export function getConversationId(): string {
+  let conversationId = localStorage.getItem("chatConversationId");
+  
+  if (!conversationId) {
+    conversationId = uuidv4();
+    localStorage.setItem("chatConversationId", conversationId);
+  }
+  
+  return conversationId;
+}
+
+// Reset conversation (for starting fresh)
+export function resetConversation(): void {
+  localStorage.removeItem("chatConversationId");
+  localStorage.removeItem("chatHistory");
+}
+
+// Get stored chat history or initialize empty array
+export function getChatHistory(): Message[] {
+  const historyJson = localStorage.getItem("chatHistory");
+  return historyJson ? JSON.parse(historyJson) : [];
+}
+
+// Save chat history to localStorage
+export function saveChatHistory(messages: Message[]): void {
+  localStorage.setItem("chatHistory", JSON.stringify(messages));
+}
+
+// Format messages for Chatbase API
+function formatMessagesForApi(messages: Message[]): any[] {
+  return messages.map(message => ({
+    role: message.role === "user" ? "user" : "assistant",
+    content: message.content
+  }));
+}
+
+// Send message to Chatbase with full conversation history
+export async function sendMessage(userMessage: string, history: Message[] = []): Promise<string> {
   try {
+    // Add user message to history
+    const updatedHistory = [
+      ...history,
+      { role: "user", content: userMessage, timestamp: new Date() }
+    ];
+    
+    // Get conversation ID
+    const conversationId = getConversationId();
+    
+    // Format messages for API
+    const apiMessages = formatMessagesForApi(updatedHistory);
+
     const body = {
       chatbotId: CHATBOT_ID,
+      conversationId: conversationId,
       stream: false,
-      messages: [
-        {
-          role: "user",
-          content: userMessage
-        }
-      ]
+      messages: apiMessages
     };
 
     const response = await fetch(API_URL, {
@@ -50,6 +98,7 @@ export async function sendMessage(userMessage: string): Promise<string> {
   }
 }
 
+// Helper function to clean message content
 export function formatMessages(messages: Message[]): Message[] {
   return messages.map(message => ({
     ...message,
