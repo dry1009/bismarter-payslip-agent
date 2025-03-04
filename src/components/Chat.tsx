@@ -1,6 +1,5 @@
-
 import { useEffect, useRef, useState } from "react";
-import { sendMessage } from "@/services/chatService";
+import { sendMessage, clearConversationHistory } from "@/services/chatService";
 import ChatHeader from "./ChatHeader";
 import ChatMessage from "./ChatMessage";
 import ChatInput from "./ChatInput";
@@ -17,6 +16,11 @@ const Chat = () => {
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
+
+  // Clear conversation history when component mounts
+  useEffect(() => {
+    clearConversationHistory();
+  }, []);
 
   // Scroll to bottom whenever messages change
   const scrollToBottom = () => {
@@ -100,7 +104,7 @@ const Chat = () => {
   const handleSendMessage = async (content: string) => {
     if (content.trim() === "") return;
 
-    // Add user message
+    // Add user message to UI
     const userMessage: Message = {
       content,
       isUser: true,
@@ -114,7 +118,7 @@ const Chat = () => {
       // Send message to API and get response
       const response = await sendMessage(content);
       
-      // Add agent response
+      // Add agent response to UI
       const agentMessage: Message = {
         content: response,
         isUser: false,
