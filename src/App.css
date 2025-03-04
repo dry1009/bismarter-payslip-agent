@@ -24,3 +24,14 @@ body.keyboard-open .flex-1.overflow-y-auto {
     transition: padding-bottom 0.3s ease;
   }
 }
+
+/* RTL Toast styling */
+.rtl-toast {
+  direction: rtl;
+  text-align: right;
+}
+
+/* Toast progress bar animation */
+.sonner-toast[data-styled="true"] {
+  animation: scale-in 0.2s ease-out;
+}

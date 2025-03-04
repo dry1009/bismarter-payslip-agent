@@ -1,4 +1,3 @@
-
 import { useEffect, useRef, useState } from "react";
 import { sendMessage, Message, getChatHistory, saveChatHistory, resetConversation } from "@/services/chatService";
 import ChatHeader from "./ChatHeader";
@@ -12,7 +11,6 @@ const Chat = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
-  // Initialize messages from stored chat history
   useEffect(() => {
     const storedMessages = getChatHistory();
     if (storedMessages.length > 0) {
@@ -20,14 +18,12 @@ const Chat = () => {
     }
   }, []);
 
-  // Save messages to localStorage whenever they change
   useEffect(() => {
     if (messages.length > 0) {
       saveChatHistory(messages);
     }
   }, [messages]);
 
-  // Scroll to bottom whenever messages change
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
@@ -36,7 +32,6 @@ const Chat = () => {
     scrollToBottom();
   }, [messages, isLoading]);
 
-  // Add viewport height fix for mobile
   useEffect(() => {
     const setViewHeight = () => {
       const vh = window.innerHeight * 0.01;
@@ -53,10 +48,8 @@ const Chat = () => {
     };
   }, []);
 
-  // Handle keyboard on mobile
   useEffect(() => {
     const handleFocusAndScroll = () => {
-      // Force scroll to bottom when input is focused
       setTimeout(() => {
         window.scrollTo(0, document.body.scrollHeight);
         scrollToBottom();
@@ -75,18 +68,14 @@ const Chat = () => {
     };
   }, []);
 
-  // Improved keyboard handling for mobile
   useEffect(() => {
     const handleVisualViewportResize = () => {
       if (window.visualViewport) {
-        // Check if the keyboard is open by comparing viewport height with window height
         const isKeyboardOpen = window.visualViewport.height < window.innerHeight;
         
         if (isKeyboardOpen) {
-          // Scroll to the last message when keyboard opens
           scrollToBottom();
           
-          // Add a class to the body when keyboard is open
           document.body.classList.add('keyboard-open');
         } else {
           document.body.classList.remove('keyboard-open');
@@ -109,49 +98,53 @@ const Chat = () => {
   const handleSendMessage = async (content: string) => {
     if (content.trim() === "") return;
 
-    // Add user message
     const userMessage: Message = {
       content,
       role: "user",
       timestamp: new Date()
     };
     
-    // Update UI with user message
     setMessages(prev => [...prev, userMessage]);
     setIsLoading(true);
 
     try {
-      // Send message to API with full conversation history
       const response = await sendMessage(content, messages);
       
-      // Add agent response
       const agentMessage: Message = {
         content: response,
         role: "agent",
         timestamp: new Date()
       };
       
-      // Update UI with agent response
       setMessages(prev => [...prev, agentMessage]);
     } catch (error) {
       console.error("Error in chat exchange:", error);
       toast.error("אירעה שגיאה בתקשורת עם הסוכן");
     } finally {
       setIsLoading(false);
-      // Ensure we scroll to bottom after loading completes
       setTimeout(scrollToBottom, 100);
     }
   };
 
   const handleResetChat = () => {
-    // Reset conversation in service
     resetConversation();
-    
-    // Clear messages from state
     setMessages([]);
-    
-    // Show toast notification
-    toast.success("הצ'אט אופס בהצלחה");
+    toast.success("הצ'אט אופס בהצלחה", {
+      position: "top-center",
+      duration: 2000,
+      className: "rtl-toast",
+      style: {
+        direction: "rtl"
+      },
+      closeButton: false,
+      icon: "🔄",
+      style: {
+        background: "white",
+        color: "#4b5563",
+        border: "1px solid #e5e7eb"
+      },
+      actionIcon: "✓",
+    });
   };
 
   return (
