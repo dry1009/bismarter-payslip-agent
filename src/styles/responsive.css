@@ -1,0 +1,17 @@
+
+/* Fix for mobile browsers */
+.h-[100dvh] {
+  height: 100dvh; /* Dynamic viewport height */
+}
+
+/* Keyboard open state */
+body.keyboard-open .flex-1.overflow-y-auto {
+  padding-bottom: 200px; /* Add extra padding when keyboard is open */
+}
+
+/* Smoother transitions */
+@media (max-width: 768px) {
+  .flex-1.overflow-y-auto {
+    transition: padding-bottom 0.3s ease;
+  }
+}

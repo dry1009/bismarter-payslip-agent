@@ -1,0 +1,6 @@
+
+/* RTL Toast styling */
+.rtl-toast {
+  direction: rtl;
+  text-align: right;
+}
