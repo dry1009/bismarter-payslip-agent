@@ -23,14 +23,14 @@ const ChatMessage = memo(({
             </span>
           </p> : isUser ? <p className="text-sm md:text-base text-right" dir="rtl">
             {content}
-          </p> : <div dir="rtl" className="markdown-content text-sm md:text-base text-right dense-markdown my-0">
+          </p> : <div className="markdown-content text-sm md:text-base text-right dense-markdown" dir="rtl">
             <ReactMarkdown components={{
           p: ({
             children
-          }) => <p className="mb-0.5 last:mb-0 py-0 my-[7px]">{children}</p>,
+          }) => <p className="mb-0.5 last:mb-0 my-[12px] py-0">{children}</p>,
           h1: ({
             children
-          }) => <h1 className="text-xl font-bold mb-0.5 mt-0.5 my-0">{children}</h1>,
+          }) => <h1 className="text-xl font-bold mb-0.5 mt-0.5">{children}</h1>,
           h2: ({
             children
           }) => <h2 className="text-lg font-bold mb-0.5 mt-0.5">{children}</h2>,
@@ -45,7 +45,7 @@ const ChatMessage = memo(({
           }) => <ol className="mb-0.5 pr-2 list-decimal space-y-0">{children}</ol>,
           li: ({
             children
-          }) => <li className="mb-0 py-0 leading-tight my-[16px]">{children}</li>,
+          }) => <li className="mb-0 py-0 leading-tight my-[7px]">{children}</li>,
           strong: ({
             children
           }) => <strong className="font-bold">{children}</strong>,
