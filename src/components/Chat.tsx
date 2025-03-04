@@ -36,7 +36,7 @@ const Chat = () => {
     scrollToBottom();
   }, [messages, isLoading]);
 
-  // Handle keyboard visibility using visualViewport API
+  // Improved keyboard handling
   useEffect(() => {
     const handleVisualViewportResize = () => {
       if (!window.visualViewport) return;
@@ -47,9 +47,16 @@ const Chat = () => {
         // Calculate keyboard height
         const keyboardHeight = window.innerHeight - window.visualViewport.height;
         
-        // Set keyboard height as a CSS variable
+        // Set keyboard height as CSS variables
         document.documentElement.style.setProperty('--keyboard-height', `${keyboardHeight}px`);
-        document.documentElement.style.setProperty('--keyboard-offset', `${keyboardHeight}px`);
+        
+        // iOS needs different offset calculation
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
+        if (isIOS) {
+          document.documentElement.style.setProperty('--keyboard-offset', `0px`);
+        } else {
+          document.documentElement.style.setProperty('--keyboard-offset', `${keyboardHeight}px`);
+        }
         
         // Add class to body
         document.body.classList.add('keyboard-visible');
@@ -57,16 +64,22 @@ const Chat = () => {
         // Set state for components that need it
         setKeyboardHeight(keyboardHeight);
         
-        // Make sure to scroll to bottom when keyboard opens
-        setTimeout(() => scrollToBottom("auto"), 100);
+        // Ensure input is visible by scrolling to bottom
+        setTimeout(() => {
+          scrollToBottom("auto");
+          // Force scroll to the very bottom of the page
+          window.scrollTo(0, document.body.scrollHeight);
+        }, 100);
       } else {
         // Reset when keyboard closes
         document.body.classList.remove('keyboard-visible');
+        document.documentElement.style.setProperty('--keyboard-height', '0px');
+        document.documentElement.style.setProperty('--keyboard-offset', '0px');
         setKeyboardHeight(0);
       }
     };
 
-    // Fix for iOS initial scroll
+    // Initial scroll to bottom
     setTimeout(() => scrollToBottom("auto"), 100);
 
     // Detect keyboard
@@ -109,7 +122,11 @@ const Chat = () => {
       toast.error("אירעה שגיאה בתקשורת עם הסוכן");
     } finally {
       setIsLoading(false);
-      setTimeout(() => scrollToBottom("smooth"), 100);
+      setTimeout(() => {
+        scrollToBottom("smooth");
+        // Ensure we're at the bottom of the page
+        window.scrollTo(0, document.body.scrollHeight);
+      }, 100);
     }
   };
 

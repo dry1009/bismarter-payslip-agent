@@ -5,7 +5,7 @@ html, body, #root {
   padding: 0;
   height: 100%;
   width: 100%;
-  overflow: hidden;
+  overflow: auto;
 }
 
 /* Fix for mobile browsers */
@@ -20,7 +20,7 @@ html, body, #root {
 
 .keyboard-visible .input-container {
   position: fixed;
-  bottom: var(--keyboard-offset, 0px);
+  bottom: 0;
   left: 0;
   right: 0;
   background-color: white;
@@ -54,4 +54,19 @@ html, body, #root {
 /* Toast progress bar animation */
 .sonner-toast[data-styled="true"] {
   animation: scale-in 0.2s ease-out;
+}
+
+/* Fix for viewport issues on mobile */
+body.keyboard-visible {
+  height: 100%;
+  position: fixed;
+  overflow: hidden;
+  width: 100%;
+}
+
+/* Ensure the viewport remains scrollable */
+.keyboard-visible #root {
+  overflow: auto;
+  height: 100%;
+  padding-bottom: var(--keyboard-height, 270px);
 }
