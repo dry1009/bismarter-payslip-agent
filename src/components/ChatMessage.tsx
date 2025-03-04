@@ -62,29 +62,6 @@ const ChatMessage = memo(({ content, isUser, isTyping }: ChatMessageProps) => {
                 pre: ({ children }) => (
                   <pre className="bg-gray-100 p-2 rounded my-2 overflow-x-auto rtl:text-left ltr:text-left whitespace-pre">{children}</pre>
                 ),
-                // Enhanced table components
-                table: ({ children }) => (
-                  <div className="my-4 overflow-x-auto rounded-lg border border-gray-200">
-                    <table className="w-full border-collapse bg-white text-left text-sm">
-                      {children}
-                    </table>
-                  </div>
-                ),
-                thead: ({ children }) => <thead className="bg-gray-50">{children}</thead>,
-                tbody: ({ children }) => <tbody className="divide-y divide-gray-100">{children}</tbody>,
-                tr: ({ children, className }) => (
-                  <tr className={cn("hover:bg-gray-50", className)}>{children}</tr>
-                ),
-                th: ({ children }) => (
-                  <th className="px-4 py-3 font-medium text-gray-700">
-                    {children}
-                  </th>
-                ),
-                td: ({ children }) => (
-                  <td className="px-4 py-3 text-gray-700">
-                    {children}
-                  </td>
-                ),
               }}
             >
               {content}

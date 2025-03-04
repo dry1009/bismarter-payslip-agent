@@ -146,34 +146,13 @@
   text-align: left;
 }
 
-/* Table Styling */
 .markdown-content table {
-  @apply w-full my-4 border-collapse bg-white text-sm shadow-sm rounded-lg overflow-hidden;
-  direction: ltr; /* Tables are generally better displayed LTR */
+  @apply w-full my-2 border-collapse;
 }
 
-.markdown-content thead {
-  @apply bg-gray-50;
-}
-
-.markdown-content tbody {
-  @apply divide-y divide-gray-200;
-}
-
-.markdown-content tr:nth-child(even) {
-  @apply bg-gray-50/50;
-}
-
-.markdown-content tr:hover {
-  @apply bg-gray-50;
-}
-
-.markdown-content th {
-  @apply px-4 py-3 text-left font-medium text-gray-700 border-b border-gray-200;
-}
-
+.markdown-content th,
 .markdown-content td {
-  @apply px-4 py-3 text-gray-700 border-b border-gray-100;
+  @apply border border-gray-300 p-1;
 }
 
 .markdown-content hr {
@@ -182,6 +161,15 @@
 
 .markdown-content a {
   @apply text-blue-600 underline;
+}
+
+/* Clean slate for mobile-first approach */
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
 }
 
 /* Fix for mobile browsers */
