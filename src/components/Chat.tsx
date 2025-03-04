@@ -9,6 +9,8 @@ import { toast } from "sonner";
 const Chat = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
+  const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
@@ -52,25 +54,44 @@ const Chat = () => {
   useEffect(() => {
     const handleVisualViewportResize = () => {
       if (window.visualViewport) {
-        const isKeyboardOpen = window.visualViewport.height < window.innerHeight;
+        const windowHeight = window.innerHeight;
+        const viewportHeight = window.visualViewport.height;
+        const keyboardOpenHeight = windowHeight - viewportHeight;
         
-        if (isKeyboardOpen) {
-          scrollToBottom();
-          
+        // Calculate keyboard height and detect if keyboard is open
+        if (keyboardOpenHeight > 150) {
+          setIsKeyboardOpen(true);
+          setKeyboardHeight(keyboardOpenHeight);
           document.body.classList.add('keyboard-open');
+          
+          // Add padding to the chat container to ensure content remains visible
+          if (chatContainerRef.current) {
+            chatContainerRef.current.style.paddingBottom = `${keyboardOpenHeight + 80}px`;
+          }
+          
+          // Delay scrolling to ensure UI is updated first
+          setTimeout(scrollToBottom, 100);
         } else {
+          setIsKeyboardOpen(false);
+          setKeyboardHeight(0);
           document.body.classList.remove('keyboard-open');
+          
+          if (chatContainerRef.current) {
+            chatContainerRef.current.style.paddingBottom = '';
+          }
         }
       }
     };
 
     if (window.visualViewport) {
       window.visualViewport.addEventListener('resize', handleVisualViewportResize);
+      window.visualViewport.addEventListener('scroll', handleVisualViewportResize);
     }
 
     return () => {
       if (window.visualViewport) {
         window.visualViewport.removeEventListener('resize', handleVisualViewportResize);
+        window.visualViewport.removeEventListener('scroll', handleVisualViewportResize);
       }
       document.body.classList.remove('keyboard-open');
     };
@@ -130,7 +151,7 @@ const Chat = () => {
       <ChatHeader onReset={handleResetChat} />
       <div 
         ref={chatContainerRef}
-        className="flex-1 overflow-y-auto px-4 pb-4" 
+        className={`flex-1 overflow-y-auto px-4 pb-4 ${isKeyboardOpen ? 'keyboard-active' : ''}`}
         dir="rtl"
       >
         <div className="max-w-3xl mx-auto space-y-4 pt-4">
@@ -164,7 +185,7 @@ const Chat = () => {
           <div ref={messagesEndRef} />
         </div>
       </div>
-      <div className="w-full border-t bg-white">
+      <div className={`w-full border-t bg-white ${isKeyboardOpen ? 'chat-input-keyboard-open' : ''}`} style={isKeyboardOpen ? { position: 'fixed', bottom: keyboardHeight, left: 0, right: 0, zIndex: 50 } : {}}>
         <div className="max-w-3xl mx-auto">
           <ChatInput onSendMessage={handleSendMessage} isLoading={isLoading} />
         </div>

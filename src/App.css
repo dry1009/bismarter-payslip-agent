@@ -18,11 +18,40 @@ body.keyboard-open .flex-1.overflow-y-auto {
   padding-bottom: 200px; /* Add extra padding when keyboard is open */
 }
 
-/* Smoother transitions */
+/* Mobile-specific adjustments */
 @media (max-width: 768px) {
+  /* Smooth transitions for keyboard opening/closing */
   .flex-1.overflow-y-auto {
     transition: padding-bottom 0.3s ease;
   }
+  
+  /* Keep the chat input visible above keyboard */
+  .chat-input-keyboard-open {
+    background-color: white;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+  }
+  
+  /* Add extra padding for iOS devices */
+  body.keyboard-open.ios .flex-1.overflow-y-auto {
+    padding-bottom: 250px;
+  }
+  
+  /* Keyboard active state for scrollable area */
+  .keyboard-active {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Ensure scroll momentum on iOS */
+  .overflow-y-auto {
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* iOS detection - added by JavaScript */
+body.ios {
+  /* iOS-specific adjustments */
 }
 
 /* RTL Toast styling */
@@ -55,5 +84,19 @@ body.keyboard-open .flex-1.overflow-y-auto {
   }
   to {
     transform: scaleX(0);
+  }
+}
+
+/* Fix for the position:fixed + keyboard issue on mobile */
+@supports (-webkit-touch-callout: none) {
+  /* iOS-specific fixes */
+  .chat-input-keyboard-open {
+    bottom: 0 !important;
+    position: sticky !important;
+  }
+  
+  /* iOS-specific keyboard height adjustment */
+  body.keyboard-open {
+    height: calc(100% - var(--keyboard-height, 0px));
   }
 }

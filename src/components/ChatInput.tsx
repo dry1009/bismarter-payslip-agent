@@ -37,11 +37,21 @@ const ChatInput = ({ onSendMessage, isLoading }: ChatInputProps) => {
 
   // Auto-focus when component mounts
   useEffect(() => {
+    // Detect iOS device and add a class to the body
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
+    if (isIOS) {
+      document.body.classList.add('ios');
+    }
+    
     setTimeout(() => {
       if (inputRef.current) {
         inputRef.current.focus();
       }
     }, 500);
+    
+    return () => {
+      document.body.classList.remove('ios');
+    };
   }, []);
 
   return (
@@ -65,6 +75,7 @@ const ChatInput = ({ onSendMessage, isLoading }: ChatInputProps) => {
         className="flex-1 text-right"
         dir="rtl"
         disabled={isLoading}
+        autoComplete="off"
       />
     </form>
   );
