@@ -54,10 +54,10 @@ function formatMessagesForApi(messages: Message[]): any[] {
 // Send message to Chatbase with full conversation history
 export async function sendMessage(userMessage: string, history: Message[] = []): Promise<string> {
   try {
-    // Add user message to history
-    const updatedHistory = [
+    // Add user message to history with the correct type for role
+    const updatedHistory: Message[] = [
       ...history,
-      { role: "user", content: userMessage, timestamp: new Date() }
+      { role: "user" as const, content: userMessage, timestamp: new Date() }
     ];
     
     // Get conversation ID
