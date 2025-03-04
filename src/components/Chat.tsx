@@ -1,4 +1,3 @@
-
 import { useEffect, useRef, useState } from "react";
 import { sendMessage, Message, getChatHistory, saveChatHistory, resetConversation } from "@/services/chatService";
 import ChatHeader from "./ChatHeader";
@@ -9,7 +8,6 @@ import { toast } from "sonner";
 const Chat = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [keyboardHeight, setKeyboardHeight] = useState(0);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
@@ -26,63 +24,65 @@ const Chat = () => {
     }
   }, [messages]);
 
-  const scrollToBottom = (behavior: ScrollBehavior = "smooth") => {
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior });
-    }
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   useEffect(() => {
     scrollToBottom();
   }, [messages, isLoading]);
 
-  // Improved keyboard handling
+  useEffect(() => {
+    const setViewHeight = () => {
+      const vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty('--vh', `${vh}px`);
+    };
+
+    setViewHeight();
+    window.addEventListener('resize', setViewHeight);
+    window.addEventListener('orientationchange', setViewHeight);
+
+    return () => {
+      window.removeEventListener('resize', setViewHeight);
+      window.removeEventListener('orientationchange', setViewHeight);
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleFocusAndScroll = () => {
+      setTimeout(() => {
+        window.scrollTo(0, document.body.scrollHeight);
+        scrollToBottom();
+      }, 300);
+    };
+
+    const inputElements = document.querySelectorAll('input');
+    inputElements.forEach(input => {
+      input.addEventListener('focus', handleFocusAndScroll);
+    });
+
+    return () => {
+      inputElements.forEach(input => {
+        input.removeEventListener('focus', handleFocusAndScroll);
+      });
+    };
+  }, []);
+
   useEffect(() => {
     const handleVisualViewportResize = () => {
-      if (!window.visualViewport) return;
-      
-      const isKeyboardVisible = window.visualViewport.height < window.innerHeight - 50;
-      
-      if (isKeyboardVisible) {
-        // Calculate keyboard height
-        const keyboardHeight = window.innerHeight - window.visualViewport.height;
+      if (window.visualViewport) {
+        const isKeyboardOpen = window.visualViewport.height < window.innerHeight;
         
-        // Set keyboard height as CSS variables
-        document.documentElement.style.setProperty('--keyboard-height', `${keyboardHeight}px`);
-        
-        // iOS needs different offset calculation
-        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
-        if (isIOS) {
-          document.documentElement.style.setProperty('--keyboard-offset', `0px`);
+        if (isKeyboardOpen) {
+          scrollToBottom();
+          
+          document.body.classList.add('keyboard-open');
         } else {
-          document.documentElement.style.setProperty('--keyboard-offset', `${keyboardHeight}px`);
+          document.body.classList.remove('keyboard-open');
         }
-        
-        // Add class to body
-        document.body.classList.add('keyboard-visible');
-        
-        // Set state for components that need it
-        setKeyboardHeight(keyboardHeight);
-        
-        // Ensure input is visible by scrolling to bottom
-        setTimeout(() => {
-          scrollToBottom("auto");
-          // Force scroll to the very bottom of the page
-          window.scrollTo(0, document.body.scrollHeight);
-        }, 100);
-      } else {
-        // Reset when keyboard closes
-        document.body.classList.remove('keyboard-visible');
-        document.documentElement.style.setProperty('--keyboard-height', '0px');
-        document.documentElement.style.setProperty('--keyboard-offset', '0px');
-        setKeyboardHeight(0);
       }
     };
 
-    // Initial scroll to bottom
-    setTimeout(() => scrollToBottom("auto"), 100);
-
-    // Detect keyboard
     if (window.visualViewport) {
       window.visualViewport.addEventListener('resize', handleVisualViewportResize);
     }
@@ -91,7 +91,7 @@ const Chat = () => {
       if (window.visualViewport) {
         window.visualViewport.removeEventListener('resize', handleVisualViewportResize);
       }
-      document.body.classList.remove('keyboard-visible');
+      document.body.classList.remove('keyboard-open');
     };
   }, []);
 
@@ -122,11 +122,7 @@ const Chat = () => {
       toast.error("אירעה שגיאה בתקשורת עם הסוכן");
     } finally {
       setIsLoading(false);
-      setTimeout(() => {
-        scrollToBottom("smooth");
-        // Ensure we're at the bottom of the page
-        window.scrollTo(0, document.body.scrollHeight);
-      }, 100);
+      setTimeout(scrollToBottom, 100);
     }
   };
 
@@ -144,8 +140,7 @@ const Chat = () => {
         border: "1px solid #e5e7eb"
       },
       closeButton: false,
-      icon: "🔄",
-      showProgress: true
+      icon: "🔄"
     });
   };
 
@@ -154,7 +149,7 @@ const Chat = () => {
       <ChatHeader onReset={handleResetChat} />
       <div 
         ref={chatContainerRef}
-        className="flex-1 overflow-y-auto px-4 pb-4 chat-container" 
+        className="flex-1 overflow-y-auto px-4 pb-4" 
         dir="rtl"
       >
         <div className="max-w-3xl mx-auto space-y-4 pt-4">
@@ -188,13 +183,9 @@ const Chat = () => {
           <div ref={messagesEndRef} />
         </div>
       </div>
-      <div className="w-full border-t bg-white input-container">
+      <div className="w-full border-t bg-white">
         <div className="max-w-3xl mx-auto">
-          <ChatInput 
-            onSendMessage={handleSendMessage} 
-            isLoading={isLoading} 
-            keyboardHeight={keyboardHeight}
-          />
+          <ChatInput onSendMessage={handleSendMessage} isLoading={isLoading} />
         </div>
       </div>
     </div>
