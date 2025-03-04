@@ -3,7 +3,11 @@ import { motion } from "framer-motion";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { useState, useEffect } from "react";
 
-const ChatHeader = () => {
+interface ChatHeaderProps {
+  onReset: () => void;
+}
+
+const ChatHeader = ({ onReset }: ChatHeaderProps) => {
   const [imageLoaded, setImageLoaded] = useState(false);
   
   useEffect(() => {
@@ -20,7 +24,12 @@ const ChatHeader = () => {
   return (
     <header className="bg-white border-b border-gray-200 shadow-sm py-3 px-4">
       <div className="max-w-3xl mx-auto flex items-center justify-between">
-        <div className="text-gray-500 text-sm">שאל כל דבר לגבי השכר שלך</div>
+        <div 
+          className="text-gray-500 text-sm cursor-pointer hover:text-gray-700 transition-colors hover:underline"
+          onClick={onReset}
+        >
+          שאל כל דבר לגבי השכר שלך
+        </div>
         <div 
           className="flex items-center cursor-pointer hover:opacity-80 transition-opacity"
           onClick={handleRefresh}

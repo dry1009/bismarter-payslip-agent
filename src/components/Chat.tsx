@@ -1,6 +1,6 @@
 
 import { useEffect, useRef, useState } from "react";
-import { sendMessage, Message, getChatHistory, saveChatHistory } from "@/services/chatService";
+import { sendMessage, Message, getChatHistory, saveChatHistory, resetConversation } from "@/services/chatService";
 import ChatHeader from "./ChatHeader";
 import ChatMessage from "./ChatMessage";
 import ChatInput from "./ChatInput";
@@ -143,9 +143,20 @@ const Chat = () => {
     }
   };
 
+  const handleResetChat = () => {
+    // Reset conversation in service
+    resetConversation();
+    
+    // Clear messages from state
+    setMessages([]);
+    
+    // Show toast notification
+    toast.success("הצ'אט אופס בהצלחה");
+  };
+
   return (
     <div className="flex flex-col h-full w-full bg-gray-50">
-      <ChatHeader />
+      <ChatHeader onReset={handleResetChat} />
       <div 
         ref={chatContainerRef}
         className="flex-1 overflow-y-auto px-4 pb-4" 
