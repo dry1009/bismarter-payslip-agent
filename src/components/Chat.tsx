@@ -1,3 +1,4 @@
+
 import { useEffect, useRef, useState } from "react";
 import { sendMessage, Message, getChatHistory, saveChatHistory, resetConversation } from "@/services/chatService";
 import ChatHeader from "./ChatHeader";
@@ -134,16 +135,13 @@ const Chat = () => {
       duration: 2000,
       className: "rtl-toast",
       style: {
-        direction: "rtl"
-      },
-      closeButton: false,
-      icon: "🔄",
-      style: {
+        direction: "rtl",
         background: "white",
         color: "#4b5563",
         border: "1px solid #e5e7eb"
       },
-      actionIcon: "✓",
+      closeButton: false,
+      icon: "🔄"
     });
   };
 
